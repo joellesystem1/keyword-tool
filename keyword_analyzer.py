@@ -476,7 +476,7 @@ def main():
     # Add instructions in an expander
     with st.expander("📋 How to get the Excel file"):
         st.markdown("""
-        1. Download the Excel file for the last 7 days from **Syndication RSoC Online KW Rev DoD**
+        1. Download the Excel file from **Syndication RSoC Online KW Rev DoD**
         2. Click the **Cross Tab** in the top right corner
         3. **Query by Partner**
         4. **Download as CSV**
