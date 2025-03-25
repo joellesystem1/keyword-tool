@@ -473,6 +473,16 @@ def manage_keyword_categories(df, selected_date, revenue_cols, rpc_cols, clicks_
 def main():
     st.title("Top Performing Keywords")
     
+    # Add instructions in an expander
+    with st.expander("📋 How to get the Excel file"):
+        st.markdown("""
+        1. Download the Excel file for the last 7 days from **Syndication RSoC Online KW Rev DoD**
+        2. Click the **Cross Tab** in the top right corner
+        3. **Query by Partner**
+        4. **Download as CSV**
+        5. Save the file to your computer
+        """)
+    
     uploaded_file = st.file_uploader("Choose your Excel file", type=['xlsx', 'xls'])
     
     if uploaded_file is not None:
