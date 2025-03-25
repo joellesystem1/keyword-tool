@@ -196,7 +196,7 @@ def analyze_keyword_trends(df, dates, revenue_cols, rpc_cols, clicks_cols, selec
         
         # Process each day's data
         for date, rev_col, clicks_col in zip(recent_dates, recent_revenue_cols, recent_clicks_cols):
-            # Convert revenue and clicks to numeric, replacing any errors with 0
+            # Convert revenue and clicks to numeric
             df[rev_col] = pd.to_numeric(df[rev_col].astype(str).str.replace('$', '').str.replace(',', ''), errors='coerce').fillna(0)
             df[clicks_col] = pd.to_numeric(df[clicks_col].astype(str).str.replace(',', ''), errors='coerce').fillna(0)
             
@@ -239,10 +239,8 @@ def analyze_keyword_trends(df, dates, revenue_cols, rpc_cols, clicks_cols, selec
         trend_rows = []
         for keyword, metrics in keyword_metrics.items():
             if metrics['total_clicks'] >= 30:  # Only include keywords with at least 30 total clicks
-                # Calculate revenue trend
+                # Calculate trends
                 revenue_change = ((metrics['last_revenue'] - metrics['first_revenue']) / metrics['first_revenue'] * 100) if metrics['first_revenue'] > 0 else 0
-                
-                # Calculate clicks trend
                 clicks_change = ((metrics['last_clicks'] - metrics['first_clicks']) / metrics['first_clicks'] * 100) if metrics['first_clicks'] > 0 else 0
                 
                 # Calculate averages
