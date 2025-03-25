@@ -136,46 +136,46 @@ def find_duplicate_keywords(df, selected_date, revenue_cols, rpc_cols, clicks_co
 
 def get_top_performers(df, selected_date, revenue_cols, rpc_cols, clicks_cols, selected_partners, min_clicks):
     try:
-    # Get the index from the selected date
-    day_index = int(selected_date.split()[1]) - 1
-    
-    # Get the corresponding columns for this index
-    revenue_col = revenue_cols[day_index]
-    rpc_col = rpc_cols[day_index]
-    clicks_col = clicks_cols[day_index]
-    
-    # Filter by selected partners
-    if selected_partners:
-        df = df[df['PARTNER_NAME'].isin(selected_partners)]
-    
-    # Clean and convert data
-    df[revenue_col] = pd.to_numeric(df[revenue_col].astype(str).str.replace('$', '').str.replace(',', ''), errors='coerce').fillna(0)
-    df[clicks_col] = pd.to_numeric(df[clicks_col].astype(str).str.replace(',', ''), errors='coerce').fillna(0)
-    df[rpc_col] = pd.to_numeric(df[rpc_col].astype(str).str.replace('$', '').str.replace(',', ''), errors='coerce').fillna(0)
-    
-    # Create clean dataframe
-    clean_df = pd.DataFrame({
-        'Keyword': df['QUERY'],
-        'Partner': df['PARTNER_NAME'],
-        'Revenue': df[revenue_col],
-        'Clicks': df[clicks_col],
-        'RPC': df[rpc_col]
-    })
-    
-    # Apply minimum clicks filter
-    clean_df = clean_df[clean_df['Clicks'] >= min_clicks]
-    
-    if clean_df.empty:
+        # Get the index from the selected date
+        day_index = int(selected_date.split()[1]) - 1
+        
+        # Get the corresponding columns for this index
+        revenue_col = revenue_cols[day_index]
+        rpc_col = rpc_cols[day_index]
+        clicks_col = clicks_cols[day_index]
+        
+        # Filter by selected partners
+        if selected_partners:
+            df = df[df['PARTNER_NAME'].isin(selected_partners)]
+        
+        # Clean and convert data
+        df[revenue_col] = pd.to_numeric(df[revenue_col].astype(str).str.replace('$', '').str.replace(',', ''), errors='coerce').fillna(0)
+        df[clicks_col] = pd.to_numeric(df[clicks_col].astype(str).str.replace(',', ''), errors='coerce').fillna(0)
+        df[rpc_col] = pd.to_numeric(df[rpc_col].astype(str).str.replace('$', '').str.replace(',', ''), errors='coerce').fillna(0)
+        
+        # Create clean dataframe
+        clean_df = pd.DataFrame({
+            'Keyword': df['QUERY'],
+            'Partner': df['PARTNER_NAME'],
+            'Revenue': df[revenue_col],
+            'Clicks': df[clicks_col],
+            'RPC': df[rpc_col]
+        })
+        
+        # Apply minimum clicks filter
+        clean_df = clean_df[clean_df['Clicks'] >= min_clicks]
+        
+        if clean_df.empty:
             st.warning(f"No keywords found with {min_clicks} or more clicks. Try lowering the minimum clicks filter.")
-        return None, None, None
-    
-    # Get top performers with consistent column order
-    column_order = ['Keyword', 'Partner', 'Revenue', 'Clicks', 'RPC']
-    top_revenue = clean_df.nlargest(10, 'Revenue')[column_order]
-    top_clicks = clean_df.nlargest(10, 'Clicks')[column_order]
-    top_rpc = clean_df.nlargest(10, 'RPC')[column_order]
-    
-    return top_revenue, top_clicks, top_rpc
+            return None, None, None
+        
+        # Get top performers with consistent column order
+        column_order = ['Keyword', 'Partner', 'Revenue', 'Clicks', 'RPC']
+        top_revenue = clean_df.nlargest(10, 'Revenue')[column_order]
+        top_clicks = clean_df.nlargest(10, 'Clicks')[column_order]
+        top_rpc = clean_df.nlargest(10, 'RPC')[column_order]
+        
+        return top_revenue, top_clicks, top_rpc
     except Exception as e:
         st.error(f"Error in get_top_performers: {str(e)}")
         return None, None, None
@@ -501,11 +501,11 @@ def main():
                 if select_all_partners:
                     selected_partners = partners
                 else:
-                selected_partners = st.multiselect(
-                    "Select Partners",
-                    partners,
-                    default=partners[:5] if len(partners) > 5 else partners
-                )
+                    selected_partners = st.multiselect(
+                        "Select Partners",
+                        partners,
+                        default=partners[:5] if len(partners) > 5 else partners
+                    )
             
             with col2:
                 date_col1, date_col2 = st.columns(2)
@@ -560,34 +560,34 @@ def main():
                     
                     if top_revenue is not None:
                         st.subheader("Top Revenue")
-                            st.dataframe(
-                                top_revenue.style.format({
-                                    'Revenue': '${:,.2f}',
-                                    'RPC': '${:,.2f}',
-                                    'Clicks': '{:,.0f}'
-                                }),
+                        st.dataframe(
+                            top_revenue.style.format({
+                                'Revenue': '${:,.2f}',
+                                'RPC': '${:,.2f}',
+                                'Clicks': '{:,.0f}'
+                            }),
                             use_container_width=True
-                            )
+                        )
                         
                         st.subheader("Top Clicks")
-                            st.dataframe(
-                                top_clicks.style.format({
-                                    'Revenue': '${:,.2f}',
-                                    'RPC': '${:,.2f}',
-                                    'Clicks': '{:,.0f}'
-                                }),
+                        st.dataframe(
+                            top_clicks.style.format({
+                                'Revenue': '${:,.2f}',
+                                'RPC': '${:,.2f}',
+                                'Clicks': '{:,.0f}'
+                            }),
                             use_container_width=True
-                            )
+                        )
                         
                         st.subheader("Top RPC")
-                            st.dataframe(
-                                top_rpc.style.format({
-                                    'Revenue': '${:,.2f}',
-                                    'RPC': '${:,.2f}',
-                                    'Clicks': '{:,.0f}'
-                                }),
+                        st.dataframe(
+                            top_rpc.style.format({
+                                'Revenue': '${:,.2f}',
+                                'RPC': '${:,.2f}',
+                                'Clicks': '{:,.0f}'
+                            }),
                             use_container_width=True
-                            )
+                        )
                         
                         # Add download button
                         combined_results = pd.concat([
